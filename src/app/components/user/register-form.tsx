@@ -42,7 +42,15 @@ export default function RegisterForm() {
                     label="Password"
                     type="password"
                     id="password"
-                    autoComplete="current-password"
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="confirm-password"
+                    label="Confirm Password"
+                    type="password"
+                    id="confirm-password"
                 />
                 <Button
                     type="submit"
