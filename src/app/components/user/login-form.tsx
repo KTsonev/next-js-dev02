@@ -4,14 +4,38 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import React, { useState } from 'react';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import React, {useState} from 'react';
 
-export default function LoginForm() {
+export default function LoginForm({redirectUrl}) {
     const [values, setValue] = useState({username:'', password: ''});
+    const [errors, setError] = useState([]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(values);
+
+        fetch('/api/user/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values)
+        }).then(result  => {
+           result.json().then((e) => {
+               setError([]);
+               if (e.ok) {
+                   window.location.replace(redirectUrl);
+               } else {
+                   setError([e.message.error]);
+               }
+           });
+        });
+    }
+
+    const updateValues = (e) => {
+        setValue(Object.assign(values, {[e.target.name]: e.target.value}));
     }
 
     return (
@@ -35,7 +59,7 @@ export default function LoginForm() {
                     label="Username"
                     name="username"
                     autoComplete="username"
-                    onChange={(e) => setValue(Object.assign(values, {username: e.target.value}))}
+                    onChange={updateValues}
                 />
                 <TextField
                     margin="normal"
@@ -46,7 +70,7 @@ export default function LoginForm() {
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    onChange={(e) => setValue(Object.assign(values, {password: e.target.value}))}
+                    onChange={updateValues}
                 />
                 <Button
                     type="submit"
@@ -56,7 +80,13 @@ export default function LoginForm() {
                 >
                     Sign In
                 </Button>
+                {errors.map((error, index) =>
+                    <Alert key={index} severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {error}
+                    </Alert>
+                )};
             </Box>
         </Box>
-    );
+    )
 }

@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import * as React from 'react';
 import {useState} from "react";
 
-export default function RegisterForm() {
+export default function RegisterForm({redirectUrl}) {
     const [values, setValue] = useState({username:'', password: '', confirmPassword: ''});
 
     const handleSubmit = (e) => {

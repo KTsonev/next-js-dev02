@@ -28,7 +28,7 @@ export async function POST(request) {
 
         return NextResponse.json({ok: true});
     } else {
-        const message = await fetchResponse.text();
+        const message = await fetchResponse.json();
         return NextResponse.json({ok: false, message: message});
     }
 }

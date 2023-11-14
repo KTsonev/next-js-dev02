@@ -23,10 +23,10 @@ export default function LoginPage() {
             <Box sx={{ width: '100%', border: 1, typography: 'body1', borderColor: 'divider', borderRadius: '5px' }}>
                 <TabContext value={value}>
                     <TabPanel value="1">
-                        <LoginForm />
+                        <LoginForm redirectUrl='/book/list'/>
                     </TabPanel>
                     <TabPanel value="2">
-                        <RegisterForm />
+                        <RegisterForm redirectUrl='/book/list'/>
                     </TabPanel>
                     <TabList centered={true} onChange={handleChange}>
                         <Tab sx={{width: '50%'}} label="Login" value="1" />
