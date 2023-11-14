@@ -5,10 +5,14 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as React from 'react';
+import {useState} from "react";
 
 export default function RegisterForm() {
+    const [values, setValue] = useState({username:'', password: '', confirmPassword: ''});
+
     const handleSubmit = (e) => {
-        event.preventDefault();
+        e.preventDefault();
+        console.log(values);
     }
 
     return (
@@ -23,16 +27,17 @@ export default function RegisterForm() {
             <Typography component="h1" variant="h5">
                 Register
             </Typography>
-            <Box component={'form'} onSubmit={handleSubmit}>
+            <Box component={'form'} autoComplete="off" onSubmit={handleSubmit}>
                 <TextField
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
                     autoFocus
+                    onChange={(e) => setValue(Object.assign(values, {username: e.target.value}))}
                 />
                 <TextField
                     margin="normal"
@@ -42,6 +47,7 @@ export default function RegisterForm() {
                     label="Password"
                     type="password"
                     id="password"
+                    onChange={(e) => setValue(Object.assign(values, {password: e.target.value}))}
                 />
                 <TextField
                     margin="normal"
@@ -51,6 +57,7 @@ export default function RegisterForm() {
                     label="Confirm Password"
                     type="password"
                     id="confirm-password"
+                    onChange={(e) => setValue(Object.assign(values, {confirmPassword: e.target.value}))}
                 />
                 <Button
                     type="submit"
