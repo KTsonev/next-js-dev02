@@ -7,7 +7,7 @@ export async function POST(request) {
     if (!username || !password) {
         return NextResponse.json({
             ok: false,
-            error: 'param missing'
+            message: 'param missing'
         },
             {status: 400}
         );
@@ -22,13 +22,13 @@ export async function POST(request) {
         }
     });
 
+    const data = await fetchResponse.json();
+
     if (fetchResponse.status === 200) {
-        const data = await fetchResponse.json();
         cookies().set('api-token', data.token);
 
-        return NextResponse.json({ok: true});
+        return NextResponse.json({ok: true, message: ''});
     } else {
-        const message = await fetchResponse.json();
-        return NextResponse.json({ok: false, message: message});
+        return NextResponse.json({ok: false, message: data.error});
     }
 }

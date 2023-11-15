@@ -6,13 +6,40 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as React from 'react';
 import {useState} from "react";
+import Alert from "@mui/material/Alert";
 
-export default function RegisterForm({redirectUrl}) {
-    const [values, setValue] = useState({username:'', password: '', confirmPassword: ''});
+export default function RegisterForm() {
+    const [values, setValue] = useState({username:'', password: '', confirm_password: ''});
+    const [messages, setMessage] = useState([]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(values);
+
+        if (values.confirm_password === values.password) {
+            fetch('/api/user/register', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values)
+            }).then(result  => {
+                result.json().then((e) => {
+                    setMessage([]);
+                    if (e.ok) {
+                        setMessage([{text: e.message, type: 'success'}]);
+                    } else {
+                        setMessage([{text: e.message, type: 'error'}]);
+                    }
+                });
+            });
+        } else {
+            setMessage([{text: 'Password not the same as confirm password', type: 'error'}]);
+        }
+    }
+
+    const updateValues = (e) => {
+        setValue(Object.assign(values, {[e.target.name]: e.target.value}));
     }
 
     return (
@@ -37,7 +64,7 @@ export default function RegisterForm({redirectUrl}) {
                     name="username"
                     autoComplete="username"
                     autoFocus
-                    onChange={(e) => setValue(Object.assign(values, {username: e.target.value}))}
+                    onChange={updateValues}
                 />
                 <TextField
                     margin="normal"
@@ -46,18 +73,20 @@ export default function RegisterForm({redirectUrl}) {
                     name="password"
                     label="Password"
                     type="password"
+                    autoComplete="new-password"
                     id="password"
-                    onChange={(e) => setValue(Object.assign(values, {password: e.target.value}))}
+                    onChange={updateValues}
                 />
                 <TextField
                     margin="normal"
                     required
                     fullWidth
-                    name="confirm-password"
+                    name="confirm_password"
                     label="Confirm Password"
                     type="password"
+                    autoComplete="new-password"
                     id="confirm-password"
-                    onChange={(e) => setValue(Object.assign(values, {confirmPassword: e.target.value}))}
+                    onChange={updateValues}
                 />
                 <Button
                     type="submit"
@@ -67,6 +96,11 @@ export default function RegisterForm({redirectUrl}) {
                 >
                     Submit
                 </Button>
+                {messages.map((message, index) =>
+                    <Alert key={index} severity={message.type}>
+                        {message.text}
+                    </Alert>
+                )}
             </Box>
         </Box>
     );

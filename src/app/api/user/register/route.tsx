@@ -7,7 +7,7 @@ export async function POST(request) {
     if (!username || !password) {
         return NextResponse.json({
                 ok: false,
-                error: 'param missing'
+                message: 'param missing'
             },
             {status: 400}
         );
@@ -23,6 +23,11 @@ export async function POST(request) {
     });
 
     cookies().delete('api-token');
+    const data = await fetchResponse.json();
 
-    return NextResponse.json({ok: (fetchResponse.status === 200)});
+    if (fetchResponse.status === 201) {
+        return NextResponse.json({ok: true, message: data.message});
+    } else {
+        return NextResponse.json({ok: false, message: data.error});
+    }
 }

@@ -7,10 +7,12 @@ import Typography from "@mui/material/Typography";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import React, {useState} from 'react';
+import {useRouter} from "next/navigation";
 
 export default function LoginForm({redirectUrl}) {
     const [values, setValue] = useState({username:'', password: ''});
-    const [errors, setError] = useState([]);
+    const [messages, setMessage] = useState([]);
+    const router = useRouter();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,11 +26,11 @@ export default function LoginForm({redirectUrl}) {
             body: JSON.stringify(values)
         }).then(result  => {
            result.json().then((e) => {
-               setError([]);
+               setMessage([]);
                if (e.ok) {
-                   window.location.replace(redirectUrl);
+                   router.push(redirectUrl);
                } else {
-                   setError([e.message.error]);
+                   setMessage([{text: e.message, type: 'error'}]);
                }
            });
         });
@@ -80,12 +82,11 @@ export default function LoginForm({redirectUrl}) {
                 >
                     Sign In
                 </Button>
-                {errors.map((error, index) =>
-                    <Alert key={index} severity="error">
-                        <AlertTitle>Error</AlertTitle>
-                        {error}
+                {messages.map((message, index) =>
+                    <Alert key={index} severity={message.type}>
+                        {message.text}
                     </Alert>
-                )};
+                )}
             </Box>
         </Box>
     )

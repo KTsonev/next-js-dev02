@@ -26,7 +26,7 @@ export default function LoginPage() {
                         <LoginForm redirectUrl='/book/list'/>
                     </TabPanel>
                     <TabPanel value="2">
-                        <RegisterForm redirectUrl='/book/list'/>
+                        <RegisterForm />
                     </TabPanel>
                     <TabList centered={true} onChange={handleChange}>
                         <Tab sx={{width: '50%'}} label="Login" value="1" />
