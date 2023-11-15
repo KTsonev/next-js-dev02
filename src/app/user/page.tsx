@@ -8,8 +8,8 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Container from "@mui/material/Container";
 
-import LoginForm from "../../components/user/login-form";
-import RegisterForm from "../../components/user/register-form";
+import LoginForm from "../components/user/login-form";
+import RegisterForm from "../components/user/register-form";
 
 export default function LoginPage() {
     const [value, setValue] = React.useState('1');
